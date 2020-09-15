@@ -40,7 +40,9 @@ var stringifyValue = function(obj) {
   }
 
   if (typeof obj === 'string' && obj.indexOf('"') !== -1) {
-    return obj.replace(/\\/g, '\\\\').replace('"', '\\\\"');
+    obj = obj.replace(/"/, '"\\');
+    obj = obj.replace(/'""'/, '"\\\"');
+    return obj;
   }
   return obj.toString();
 };
@@ -239,4 +241,10 @@ var expected = JSON.stringify(obj);
 assertEqual(actual, expected);
 
 
+
+var obj = '"hello"';
+
+var actual = stringifyJSON(obj);
+var expected = JSON.stringify(obj);
+assertEqual(actual, expected);
 
