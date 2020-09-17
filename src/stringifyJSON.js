@@ -18,6 +18,7 @@ var stringifyJSON = function(obj) {
 
   if (shouldReturnNull(obj)) { return 'null'; }
 
+  // otherwise
   return stringifyPrimitiveVal(obj);
 };
 
@@ -146,7 +147,7 @@ var accumulateObjectElements = function(obj, accumulator) {
 
       } else if (Array.isArray(currentVal)) {
         accumulator += '"' + key + '":';
-        accumulator = accumulateArrayValue(currentVal, accumulator);
+        accumulator = accumulateArrayValue(currentVal, index, accumulator);
 
       } else if (isStringifyableObj(currentVal)) {
         accumulator += '"' + key + '":';
@@ -165,7 +166,7 @@ var accumulateObjectElements = function(obj, accumulator) {
 // Helper Func
 var shouldReturnNothing = function(value) {
   return value === undefined || typeof value === 'function' ||
-                                typeof value === 'symbol';
+                                     typeof value === 'symbol';
 };
 
 // Helper Func
@@ -189,7 +190,7 @@ var isStringifyableObj = function(obj) {
 };
 
 // Helper Func
-var accumulateArrayValue = function(array, accumulator) {
+var accumulateArrayValue = function(array, currentIndex, accumulator) {
   accumulator += stringifyArray(array);
   return accumulator;
 };
@@ -208,22 +209,22 @@ var accumulateObjValue = function(obj, accumulator) {
 };
 
 // Helper Func
-var stringifyPrimitiveVal = function(obj) {
+var stringifyPrimitiveVal = function(value) {
 
-  if (shouldReturnNull(obj)) { return null; }
+  if (shouldReturnNull(value)) { return null; }
 
-  if (isString(obj) && !hasSingleQuote(obj) && !hasDoubleQuote(obj)) { return '"' + obj + '"'; }
+  if (isString(value) && !hasSingleQuote(value) && !hasDoubleQuote(value)) { return '"' + value + '"'; }
 
-  if (hasSingleQuote(obj)) { return obj = '"' + obj + '"'; }
+  if (hasSingleQuote(value)) { return value = '"' + value + '"'; }
 
-  if (hasDoubleQuote(obj)) {
-    obj = obj.replace(/"/g, '\\\"');
-    obj = '"' + obj + '"';
-    return obj;
+  if (hasDoubleQuote(value)) {
+    value = value.replace(/"/g, '\\\"');
+    value = '"' + value + '"';
+    return value;
   }
 
   // otherwise
-  return obj.toString();
+  return value.toString();
 };
 
 // Helper Func
