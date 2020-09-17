@@ -146,7 +146,7 @@ var accumulateObjectElements = function(obj, accumulator) {
 
       } else if (Array.isArray(currentVal)) {
         accumulator += '"' + key + '":';
-        accumulator = accumulateArrayValue(currentVal, index, accumulator);
+        accumulator = accumulateArrayValue(currentVal, accumulator);
 
       } else if (isStringifyableObj(currentVal)) {
         accumulator += '"' + key + '":';
@@ -165,7 +165,7 @@ var accumulateObjectElements = function(obj, accumulator) {
 // Helper Func
 var shouldReturnNothing = function(value) {
   return value === undefined || typeof value === 'function' ||
-                                     typeof value === 'symbol';
+                                typeof value === 'symbol';
 };
 
 // Helper Func
@@ -189,7 +189,7 @@ var isStringifyableObj = function(obj) {
 };
 
 // Helper Func
-var accumulateArrayValue = function(array, currentIndex, accumulator) {
+var accumulateArrayValue = function(array, accumulator) {
   accumulator += stringifyArray(array);
   return accumulator;
 };
@@ -331,7 +331,7 @@ assertEqual(actual, expected);
 
 
 var obj = [
-  {a: 'b'}, {b : 'd'}
+  { a: 'b' }, { b: 'd' }
 ];
 var actual = stringifyJSON(obj);
 var expected = JSON.stringify(obj);
@@ -342,3 +342,4 @@ var obj = {a: [], c: {}, b: true};
 var actual = stringifyJSON(obj);
 var expected = JSON.stringify(obj);
 assertEqual(actual, expected);
+
