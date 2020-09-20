@@ -147,7 +147,7 @@ var accumulateObjectElements = function(obj, accumulator) {
 
       } else if (Array.isArray(currentVal)) {
         accumulator += '"' + key + '":';
-        accumulator = accumulateArrayValue(currentVal, index, accumulator);
+        accumulator = accumulateArrayValue(currentVal, accumulator);
 
       } else if (isStringifyableObj(currentVal)) {
         accumulator += '"' + key + '":';
@@ -190,7 +190,7 @@ var isStringifyableObj = function(obj) {
 };
 
 // Helper Func
-var accumulateArrayValue = function(array, currentIndex, accumulator) {
+var accumulateArrayValue = function(array, accumulator) {
   accumulator += stringifyArray(array);
   return accumulator;
 };
@@ -238,13 +238,12 @@ var hasSingleQuote = function(obj) {
 };
 
 
-
 // Assertion Func()
 var assertEqual = function(actual, expected) {
   if (actual === expected) {
     console.log('passed');
   } else {
-    console.log('failed, \n\nexpected "' + expected + '"\n\n but got "' + actual + '"');
+    console.log('\nfailed, \nexpected "' + expected + '"\n but got "' + actual + '"');
   }
 };
 
