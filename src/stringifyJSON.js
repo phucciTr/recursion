@@ -94,7 +94,7 @@ var checkObjectInstance = function(obj) {
   if (isPrimitiveInstance(obj)) {
 
     if (obj instanceof Date) {
-      return obj.toISOString();
+      return '\"' + obj.toISOString() + '\"';
 
     } else if (obj instanceof RegExp) {
       return '{}';
@@ -238,6 +238,7 @@ var hasSingleQuote = function(obj) {
 };
 
 
+
 // Assertion Func()
 var assertEqual = function(actual, expected) {
   if (actual === expected) {
@@ -250,8 +251,8 @@ var assertEqual = function(actual, expected) {
 
 // Assertions
 var arr = [1, [Infinity, Symbol('')], 3, [null, 1, Infinity, undefined, function() {}], [2, 4, 5]];
-var actual = stringifyJSON(obj);
-var expected = JSON.stringify(obj);
+var actual = stringifyJSON(arr);
+var expected = JSON.stringify(arr);
 assertEqual(actual, expected);
 
 
@@ -267,12 +268,20 @@ var actual = stringifyJSON(obj);
 var expected = JSON.stringify(obj);
 assertEqual(actual, expected);
 
-
 var obj = new String('hello');
 var actual = stringifyJSON(obj);
 var expected = JSON.stringify(obj);
 assertEqual(actual, expected);
 
+var obj = new Boolean(true);
+var actual = stringifyJSON(obj);
+var expected = JSON.stringify(obj);
+assertEqual(actual, expected);
+
+var obj = new Date(2006, 0, 2, 15, 4, 5);
+var actual = stringifyJSON(obj);
+var expected = JSON.stringify(obj);
+assertEqual(actual, expected);
 
 var obj = '"hello"';
 var actual = stringifyJSON(obj);
@@ -295,23 +304,20 @@ var actual = stringifyJSON(obj);
 var expected = JSON.stringify(obj);
 assertEqual(actual, expected);
 
-var obj = 'Hello world';
+var obj = 'Hello Code\'s world';
 var actual = stringifyJSON(obj);
 var expected = JSON.stringify(obj);
 assertEqual(actual, expected);
-
-
-var obj = [1, 2, 3, [8], 9];
-var actual = stringifyJSON(obj);
-var expected = JSON.stringify(obj);
-assertEqual(actual, expected);
-
 
 var obj = [4, '["hi"]', 6, 9, 12];
 var actual = stringifyJSON(obj);
 var expected = JSON.stringify(obj);
 assertEqual(actual, expected);
 
+var obj = [1, 2, 3, [8], 9];
+var actual = stringifyJSON(obj);
+var expected = JSON.stringify(obj);
+assertEqual(actual, expected);
 
 var obj = {
   'foo': true,
