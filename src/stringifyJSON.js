@@ -94,7 +94,7 @@ var checkObjectInstance = function(obj) {
   if (isPrimitiveInstance(obj)) {
 
     if (obj instanceof Date) {
-      return '\"' + obj.toISOString() + '\"';
+      return '"' + obj.toISOString() + '"';
 
     } else if (obj instanceof RegExp) {
       return '{}';
