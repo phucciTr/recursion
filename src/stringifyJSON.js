@@ -147,7 +147,7 @@ var accumulateObjectElements = function(obj, accumulator) {
 
       } else if (Array.isArray(currentVal)) {
         accumulator += '"' + key + '":';
-        accumulator = accumulateArrayValue(currentVal, accumulator);
+        accumulator += stringifyArray(currentVal, accumulator);
 
       } else if (isStringifyableObj(currentVal)) {
         accumulator += '"' + key + '":';
@@ -187,12 +187,6 @@ var isBoolean = function(value) {
 // Helper Func
 var isStringifyableObj = function(obj) {
   return typeof obj === 'object' && obj !== undefined && obj !== null;
-};
-
-// Helper Func
-var accumulateArrayValue = function(array, accumulator) {
-  accumulator += stringifyArray(array);
-  return accumulator;
 };
 
 // Helper Func
