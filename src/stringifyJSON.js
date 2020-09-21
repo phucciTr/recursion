@@ -145,16 +145,13 @@ var accumulateObjectElements = function(obj, accumulator) {
       } else if (isBoolean(currentVal)) {
         accumulator += '"' + key + '":' + currentVal;
 
-      } else if (Array.isArray(currentVal)) {
-        accumulator += '"' + key + '":';
-        accumulator += stringifyArray(currentVal, accumulator);
-
-      } else if (isStringifyableObj(currentVal)) {
-        accumulator += '"' + key + '":';
-        accumulator = accumulateObjValue(currentVal, accumulator);
-
       } else if (shouldReturnNull(currentVal)) {
         accumulator += '"' + key + '":null';
+
+      // (currentVal) is (obj)
+      } else {
+        accumulator += '"' + key + '":';
+        accumulator += stringifyJSON(currentVal);
       }
 
       if (!isEndOfArray(index, keys)) { accumulator += ','; }
@@ -182,24 +179,6 @@ var isNumber = function(value) {
 // Helper Func
 var isBoolean = function(value) {
   return typeof value === 'boolean';
-};
-
-// Helper Func
-var isStringifyableObj = function(obj) {
-  return typeof obj === 'object' && obj !== undefined && obj !== null;
-};
-
-// Helper Func
-var accumulateObjValue = function(obj, accumulator) {
-
-  if (isPrimitiveInstance(obj)) { accumulator += checkObjectInstance(obj); }
-
-  if (isPurelyObj(obj)) {
-    accumulator += '{';
-    accumulator = accumulateObjectElements(obj, accumulator);
-    accumulator += '}';
-  }
-  return accumulator;
 };
 
 // Helper Func

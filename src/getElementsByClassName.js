@@ -14,26 +14,26 @@ var getElementsByClassName = function(className) {
 };
 
 
-// (!) (depth first traversal) with recursion
+// (!) (Depth first traversal) with recursion
 var searchThruDom = function(current, className, elements) {
 
-  // check for (matching className) & collect (current) if match..
+  // Check for (matching className) & collect (current) if match..
   checkNcollectElement(current, className, elements);
 
   // get to (current)'s (child)..
   current = current.firstChild;
 
-  // if (current child) exists
+  // If (current child) exists..
   while (current) {
 
     // recursively search thru (current)'s (child) & (grandChild) & (so on)..
     // until a (current) has (no child)..
     searchThruDom(current, className, elements);
 
-    // once a (current) has (no child), check (current)'s (sibling)..
-    // if a (current) has (no sibling)..
+    // once a (current) has (no child), check (current)'s (sibling) & (newphews) & so on
+    // If a (current) has (no sibling)..
     // get back to (current)'s (parent) on call stack..
-    // to check for (current)'s (uncle) & (so on)
+    // to check for (current)'s (uncle) & (cousins) & (so on)
     current = current.nextSibling;
 
   }
@@ -49,3 +49,4 @@ var checkNcollectElement = function(current, className, elements) {
   }
 
 };
+
