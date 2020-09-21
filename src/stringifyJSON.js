@@ -103,11 +103,11 @@ var shouldReturnNullInsideArray = function(value) {
 
 var stringifyObject = function(obj) {
   let accumulator = '{';
-  accumulator = accumulateObjectElements(obj, accumulator);
+  accumulator = accumulateObjectProperties(obj, accumulator);
   return accumulator;
 };
 
-var accumulateObjectElements = function(obj, accumulator) {
+var accumulateObjectProperties = function(obj, accumulator) {
 
   let keys = Object.keys(obj);
 
