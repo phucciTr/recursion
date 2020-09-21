@@ -156,13 +156,13 @@ var isString = function(value) {
 };
 
 // Helper Func
-var hasDoubleQuote = function(obj) {
-  return typeof obj === 'string' && obj.indexOf('"') !== -1;
+var hasDoubleQuote = function(value) {
+  return typeof value === 'string' && value.indexOf('"') !== -1;
 };
 
 // Helper Func
-var hasSingleQuote = function(obj) {
-  return typeof obj === 'string' && obj.indexOf('\'') !== -1;
+var hasSingleQuote = function(value) {
+  return typeof value === 'string' && value.indexOf('\'') !== -1;
 };
 
 
