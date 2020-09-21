@@ -7,16 +7,13 @@
 var stringifyJSON = function(obj) {
 
   if (shouldReturnUndefined(obj)) { return undefined; }
-
-  if (Array.isArray(obj)) { return stringifyArray(obj); }
+  if (shouldReturnNull(obj)) { return 'null'; }
 
   if (isTypeOfObject(obj)) {
     let stringifiedObj = checkObjectInstance(obj);
-    if (!isPrimitiveInstance(obj)) { stringifiedObj += '}'; }
+    if (isPurelyObj(obj)) { stringifiedObj += '}'; }
     return stringifiedObj;
   }
-
-  if (shouldReturnNull(obj)) { return 'null'; }
 
   // otherwise
   return stringifyPrimitiveVal(obj);
@@ -38,44 +35,6 @@ var shouldReturnNull = function(obj) {
   return obj === null || obj === Infinity ||
    typeof obj === 'number' && isNaN(obj);
 };
-
-var stringifyArray = function(arrayObj) {
-  let accumulator = '[';
-  accumulator = accumulateArrayElements(arrayObj, accumulator);
-  accumulator += ']';
-  return accumulator;
-};
-
-var accumulateArrayElements = function(array, accumulator) {
-
-  array.forEach(function(current, index) {
-
-    if (isTypeOfObject(current)) {
-      accumulator += stringifyJSON(current);
-
-    } else if (shouldReturnNullInsideArray(current)) {
-      accumulator += 'null';
-
-    } else { accumulator += stringifyPrimitiveVal(current); }
-
-    if (!isEndOfArray(index, array)) { accumulator += ','; }
-  });
-
-  return accumulator;
-};
-
-// Helper Func
-var isEndOfArray = function(counter, array) {
-  return counter === array.length - 1;
-};
-
-// Helper Func
-var shouldReturnNullInsideArray = function(value) {
-  return typeof value === 'symbol' || value === null ||
-  value === Infinity || (typeof value === 'number' && isNaN(value)) ||
-  value === undefined || typeof value === 'function';
-};
-
 
 var checkObjectInstance = function(obj) {
 
@@ -111,6 +70,37 @@ var isPrimitiveInstance = function(obj) {
                              obj instanceof RegExp;
 };
 
+var stringifyArray = function(arrayObj) {
+  let accumulator = '[';
+  accumulator = accumulateArrayElements(arrayObj, accumulator);
+  accumulator += ']';
+  return accumulator;
+};
+
+var accumulateArrayElements = function(array, accumulator) {
+
+  array.forEach(function(current, index) {
+
+    accumulator += shouldReturnNullInsideArray(current) ? 'null' : stringifyJSON(current);
+
+    if (!isEndOfArray(index, array)) { accumulator += ','; }
+  });
+
+  return accumulator;
+};
+
+// Helper Func
+var isEndOfArray = function(counter, array) {
+  return counter === array.length - 1;
+};
+
+// Helper Func
+var shouldReturnNullInsideArray = function(value) {
+  return typeof value === 'symbol' || value === null ||
+  value === Infinity || (typeof value === 'number' && isNaN(value)) ||
+  value === undefined || typeof value === 'function';
+};
+
 var stringifyObject = function(obj) {
   let accumulator = '{';
   accumulator = accumulateObjectElements(obj, accumulator);
@@ -126,26 +116,8 @@ var accumulateObjectElements = function(obj, accumulator) {
     let currentVal = obj[key];
 
     if (!shouldReturnNothing(currentVal)) {
-
-      if (isString(currentVal)) {
-        accumulator += '"' + key + '":"' + currentVal + '"';
-
-      } else if (isNumber(currentVal)) {
-        accumulator += '"' + key + '":';
-        accumulator += (currentVal === Infinity) ? 'null' : currentVal;
-
-      } else if (isBoolean(currentVal)) {
-        accumulator += '"' + key + '":' + currentVal;
-
-      } else if (shouldReturnNull(currentVal)) {
-        accumulator += '"' + key + '":null';
-
-      // (currentVal) is (obj)
-      } else {
-        accumulator += '"' + key + '":';
-        accumulator += stringifyJSON(currentVal);
-      }
-
+      accumulator += '"' + key + '":';
+      accumulator += shouldReturnNull(currentVal) ? 'null' : stringifyJSON(currentVal);
       if (!isEndOfArray(index, keys)) { accumulator += ','; }
     }
   });
@@ -158,20 +130,6 @@ var shouldReturnNothing = function(value) {
                                      typeof value === 'symbol';
 };
 
-// Helper Func
-var isString = function(value) {
-  return typeof value === 'string';
-};
-
-// Helper Func
-var isNumber = function(value) {
-  return typeof value === 'number';
-};
-
-// Helper Func
-var isBoolean = function(value) {
-  return typeof value === 'boolean';
-};
 
 // Helper Func
 var stringifyPrimitiveVal = function(value) {
@@ -190,6 +148,11 @@ var stringifyPrimitiveVal = function(value) {
 
   // otherwise
   return value.toString();
+};
+
+// Helper Func
+var isString = function(value) {
+  return typeof value === 'string';
 };
 
 // Helper Func
@@ -313,4 +276,3 @@ var obj = {a: [], c: {}, b: true};
 var actual = stringifyJSON(obj);
 var expected = JSON.stringify(obj);
 assertEqual(actual, expected);
-
