@@ -33,7 +33,7 @@ var isTypeOfObject = function(obj) {
 // Helper Func
 var shouldReturnNull = function(obj) {
   return obj === null || obj === Infinity ||
-   typeof obj === 'number' && isNaN(obj);
+  typeof obj === 'number' && isNaN(obj);
 };
 
 var checkObjectInstance = function(obj) {
@@ -60,14 +60,15 @@ var checkObjectInstance = function(obj) {
 
 // Helper Func
 var isPurelyObj = function(obj) {
-  return !isPrimitiveInstance(obj) && obj !== null && !Array.isArray(obj);
+  return !isPrimitiveInstance(obj) && obj !== null &&
+         !Array.isArray(obj);
 };
 
 // Helper Func
 var isPrimitiveInstance = function(obj) {
   return obj instanceof Boolean || obj instanceof Number ||
-    obj instanceof String || obj instanceof Date ||
-                             obj instanceof RegExp;
+          obj instanceof String || obj instanceof Date ||
+                                   obj instanceof RegExp;
 };
 
 var stringifyArray = function(arrayObj) {
@@ -127,7 +128,7 @@ var accumulateObjectProperties = function(obj, accumulator) {
 // Helper Func
 var shouldReturnNothing = function(value) {
   return value === undefined || typeof value === 'function' ||
-                                     typeof value === 'symbol';
+                                typeof value === 'symbol';
 };
 
 
@@ -136,33 +137,34 @@ var stringifyPrimitiveVal = function(value) {
 
   if (shouldReturnNull(value)) { return null; }
 
-  if (isString(value) && !hasSingleQuote(value) && !hasDoubleQuote(value)) { return '"' + value + '"'; }
-
-  if (hasSingleQuote(value)) { return value = '"' + value + '"'; }
-
-  if (hasDoubleQuote(value)) {
-    value = value.replace(/"/g, '\\\"');
-    value = '"' + value + '"';
-    return value;
+  if (isString(value)) {
+    if (hasDoubleQuote(value)) { value = value.replace(/"/g, '\\\"'); }
+    return '"' + value + '"';
   }
 
   // otherwise
   return value.toString();
 };
 
-// Helper Func
 var isString = function(value) {
-  return typeof value === 'string';
+  return isStringWithoutQuote(value) || hasSingleQuote(value) ||
+                                        hasDoubleQuote(value);
 };
 
 // Helper Func
-var hasDoubleQuote = function(value) {
-  return typeof value === 'string' && value.indexOf('"') !== -1;
+var isStringWithoutQuote = function(value) {
+  return typeof value === 'string' && !hasSingleQuote(value) &&
+                                      !hasDoubleQuote(value);
 };
 
 // Helper Func
 var hasSingleQuote = function(value) {
   return typeof value === 'string' && value.indexOf('\'') !== -1;
+};
+
+// Helper Func
+var hasDoubleQuote = function(value) {
+  return typeof value === 'string' && value.indexOf('"') !== -1;
 };
 
 
