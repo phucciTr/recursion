@@ -50,16 +50,8 @@ var accumulateArrayElements = function(array, accumulator) {
 
   array.forEach(function(current, index) {
 
-    if (Array.isArray(current)) {
-
-      let stringifiedArray = stringifyArray(current);
-      accumulator += stringifiedArray;
-
-    } else if (isTypeOfObject(current)) {
-
-      let stringifiedObj = checkObjectInstance(current);
-      if (!isPrimitiveInstance(current)) { stringifiedObj += '}'; }
-      accumulator += stringifiedObj;
+    if (isTypeOfObject(current)) {
+      accumulator += stringifyJSON(current);
 
     } else if (shouldReturnNullInsideArray(current)) {
       accumulator += 'null';
